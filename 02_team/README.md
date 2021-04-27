@@ -71,7 +71,7 @@
 
 ---
 
-#### 딘잠 1. 개발 비용
+#### 단점 1. 개발 비용
 
 고정형 웹 디자인만을 고려해 웹 사이트를 개발하는 것에 비해서 반응형 웹 디자인을 고려하려면 더 많은 노력과 디테일을 필요로 하기 때문에 개발자들에게 추가적인 비용을 부과한다. 하지만 이러한 단점도 웹 사이트를 데스크탑과 모바일 각각 개발하는 것 보다는 비용이 적게 들기 때문에 만약 모바일 디자인이 필수적인 경우라면 이는 단점이 아니게 될 것이다.
 
@@ -118,20 +118,113 @@ media query를 잘 활용한 두번째 사례는 smashing magazine 홈페이지�
 
 유동적인 레이아웃의 변경으로 모바일과 데스크탑 환경에서 각각 최적의 사용자 경험을 제공하는 사례는 github repository 페이지다. 데스크탑 환경에서는 화면 좌측에 사용자 프로필, 우측에 repository 리스트가 위치해있지만 화면의 너비가 줄어듦에 따라 사용자 프로필은 화면의 윗쪽으로, repository 리스트는 화면의 아랫쪽으로 레이아웃이 유동적으로 변경되었다. 또한 데스크탑 환경에서는 네브바를 포함한 검색 인풋이 모바일 환경에서는 햄버거 메뉴로 숨겨졌다.
 
-## media query
+## 3. 호환성
 
-### 설명
+### 3.1 호환성이란
+
+웹 호환성이란, 여러 브라우저에서 동일한 사용자 경험을 제공하는 것을 말한다. 21세기는 PC와 모바일 기기를 통들어 사용자가 다양한 기기로 웹 서비스를 이용하기 때문에 호환성을 준수하는 것이 매우 중요해졌다.
+
+### 3.반응형 구현 기술
+
+#### 3.2.1 viewport
+
+`viewport`: 기기 별로 뷰포트가 다르기 때문에 발생하는 배율 문제에 대응하기 위해 meta 태그의 속성으로 뷰포트 관련 설정을 추가할 수 있다.
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+```
+
+위 태그는 뷰포트의 너비를 단말기 너비에 맞추고, 그 배율을 1로 설정한다는 의미가 된다.
+
+#### 3.2.2 picture & source tag
+
+여러 개의 이미지 중에서 가장 적합한 이미지를 선택해 디스플레이나 기기에 표시한다.
+
+#### 1. 문법
+
+```html
+<picture>
+  <source .... />
+  <source .... />
+  <img />
+</picture>
+```
+
+`picture`요소를 사용하려면 위 예시 처럼 자식 요소로 0개 이상의 `source`요소와 적어도 하나 이상의 `img`요소를 지정해 주어야한다. `picture` 요소를 지원하는 브라우저는 `source` 요소중에 가장 적합한 이미지를 선택해 디스플레이나 기기에 표시한다. 만약, `source` 요소중에 적합한 이미지를 찾을 수 없거나, `picture` 태그를 지원하지 않는 경우에는 `img` 요소를 표시한다.
+
+#### 2. 활용
+
+- 로딩시간을 줄인다.
+
+`source tag`: picture, audio, video 태그 내부에서 사용하는 요소이다. source 태그는 미디어 자료가 저장된 위치를 가리키며, 여러 미디어 자료 중 사용자에게 가장 적합한 데이터를 전달하기 위해 사용한다.
+
+```html
+<picture>
+  <source
+    srcset="/media/cc0-images/surfer-240-200.jpg"
+    media="(min-width: 800px)"
+  />
+  <img src="/media/cc0-images/painted-hand-298-332.jpg" alt="" />
+</picture>
+```
+
+위에서 설명한 picture 태그와 source태그는 아래 CanIUse 사이트에서 조회한
+결과, IE와 Opera 브라우저와 호환되지 않는다.
+
+```html
+<img src="./img/picture.png" width="700" />
+<br />
+<img src="./img/source.png" width="700" />
+```
+
+#### 3.2.3 img tag attributes `srcset`: 이미지 소스의 세트를 설정할 수 있다.
+
+이 속성을 사용하면 브라우저가 사용자의 환경에 맞춰 가장 적합한 이미지를 선택해
+보여준다. `sizes`: 미디어조건을 설정하고, 설정한 미디어 조건에 해당하는 최적화
+출력 크기를 지정한다.
+
+```html
+<img
+  srcset="elva-fairy-480w.jpg 480w, elva-fairy-800w.jpg 800w"
+  sizes="(max-width: 600px) 480px,
+              800px"
+  src="elva-fairy-800w.jpg"
+  alt="Elva dressed as a fairy"
+/>
+```
+
+caniuse 에서 제공하는 정보에 의하면 picture 태그는 IE와 Opera Mini 브라우저에서 사용할 수 없다.
+
+<img src="./img/srcset-sizes.png" width=700>
+
+#### 3.2.4 media-query
+
+미디어 쿼리는 미디어 유형과, 미디어의 특성에 따라 스타일을 지정하고 싶을 때 사용한다.
+
+#### 1. 문법
+
+미디어 쿼리는 선택 사항인 미디어 유형과, 자유로운 수의 미디어 특성 표현식으로 이루어진다. 논리 연산자를 활용하여 다수의 쿼리를 다양한 방법으로 결합할 수 있으며, 쿼리는 대소문자가 구분되지 않는다.
+
+```css
+@media 조건 {
+    css 문법
+}
+```
+
+> 참고1
+> 조건에는 미디어의 유형 또는 특성을 입력한다.
+
+> 참고2
+> 조건을 충족하면 {} 내에 작성한 css 문법이 적용된다.
+
+#### 2. 설명
 
 미디어 쿼리(media query)는 디바이스의 유형과 화면 해상도, 뷰포트 너비 등의 특성이나 수치에 따라 웹 사이트나 앱의 스타일을 수정할 때 유용하게 적용가능한 규칙이다.
 
 - 미디어 쿼리는 `@media`와 `@import` 규칙을 사용해 적용할 수 있다.
-- <style>, <link>, <source>, 기타 다른 HTML 요소에 `media` 특성을 사용해 특정 매체만 가리키게 할 수 있다.
+- `<style>, <link>, <source>, 기타 다른 HTML 요소에 media` 특성을 사용해 특정 매체만 가리키게 할 수 있다.
 
-### 구문
-
-미디어 쿼리는 선택 사항인 미디어 유형과, 자유로운 수의 미디어 특성 표현식으로 이루어진다. 논리 연산자를 활용하여 다수의 쿼리를 다양한 방법으로 결합할 수 있으며, 쿼리는 대소문자가 구분되지 않는다.
-
-### 미디어 유형
+#### 3. 미디어 유형
 
 미디어 유형은 장치를 의미한다. 미디어 유형은 `not`이나 `only` 논리연산자를 사용할 때를 제외하면 선택사항이며 지정하지 않으면 디폴트 `all`이다.
 
@@ -140,7 +233,7 @@ media query를 잘 활용한 두번째 사례는 smashing magazine 홈페이지�
 - `screen`: 주로 화면이 대상이다.
 - `speech`: 음성 합성장치이다.
 
-### 미디어 유형 특정
+#### 4. 미디어 유형 특정
 
 미디어 유형은 프린터나 오디오 기반 스크린 리더처럼 특정 장치를 대상으로 하는 스타일을 만들 수 있다.
 
@@ -150,7 +243,35 @@ media query를 잘 활용한 두번째 사례는 smashing magazine 홈페이지�
 
 > @media screen, print { ... }
 
-### 미디어 쿼리 코드 템플릿
+#### 5. 논리 연산자
+
+`not`, `and`, `or`, `only`와 같은 논리 연산자를 사용해서 쿼리를 조합하면 복잡한 조건식을 만들 수 있다.
+
+##### a and b:
+
+`and` 연산자를 사용하면 조건 `a`와 `b`를 모두 충족해야 스타일이 적용된다.
+
+##### a or b:
+
+`or`을 사용하면 다수의 기능을 판별해서 하나라도 맞는 경우 스타일을 적용시킬 수 있습니다.
+
+##### not a and b
+
+`not` 연산자를 사용하면 이따라 작성된 전체 조건식의 의미를 반전시킨다. 즉 a 조건에만 적용되는 것이 아니고 a and b에 적용된다.
+
+> @media not all and (monochrome) {...}
+> 위의 쿼리는 아래와 같이 평가된다.
+> @media not(all and (monochrome)) {...}
+> 아래와 같이 평가되는 것이 아니다.
+> @media (not all) and (monochrome) {...}
+
+##### only
+
+`only` 연산자는 전체 쿼리가 일치할 경우에만 스타일이 적용된다.
+
+`screen and (max-width: 500px)` 쿼리를 작성했을 때 구형 브라우저에서 `max-width:500px` 부분을 인식하지 못하기 대문에 screen 조건이 참이되면 스타일을 적용해 버린다. 이와 같은 오류를 방지하기 위해 `only`를 사용할 수 있다.
+
+#### 6. 미디어 쿼리 코드 템플릿
 
 아래 예시는 모든 해상도를 커버하기 위한 미디어 쿼리 코드 템플릿이다. All, Mobile, Tablet, Desktop 으로 기기별 대응 코드를 분류했지만 Liquid 레이아웃 기법을 사용하여 모든 해상도를 커버할 수 있다.
 
@@ -172,9 +293,9 @@ media query를 잘 활용한 두번째 사례는 smashing magazine 홈페이지�
 }
 ```
 
-### 조건문이 될 수 있는 속성들
+#### 7. 조건문이 될 수 있는 속성들
 
-#### width / height
+##### width / height
 
 뷰포트의 너비와 높이, 뷰포트의 크기는 HTML body 콘텐츠를 표시하는 영역으로 실제 스크린의 크기와 다를 수 있다.
 
@@ -198,7 +319,7 @@ media query를 잘 활용한 두번째 사례는 smashing magazine 홈페이지�
 } /* 뷰포트 너비가 768px 이상 1024px 이하가 '아닐 때', 즉 768px 미만 혹은 1024px 초과일 때 실행 */
 ```
 
-#### device-width / device-height
+##### device-width / device-height
 
 스크린의 너비와 높이. 스크린은 출력 장치가 픽셀을 표시할 수 있는 모든 영역으로 일반적으로 HTML body 콘텐츠를 표시하는 뷰포트 보다 크다.
 
@@ -214,7 +335,7 @@ media query를 잘 활용한 두번째 사례는 smashing magazine 홈페이지�
 @media all and (min-device-width:320px) and (min-device-height:480px) { … } // 스크린 너비가 최소 320px 이상 '그리고' 높이가 최소 480px 이상이면 실행
 ```
 
-#### orientation
+##### orientation
 
 `orientation`은 뷰포트의 너비와 높이 비율을 이용하여 세로 모드인지 가로 모드인지 판단하여 스타일을 적용한다.
 
@@ -234,7 +355,7 @@ media query를 잘 활용한 두번째 사례는 smashing magazine 홈페이지�
 } /* 가로 모드, 뷰포트의 너비가 높이에 비해 상대적으로 크면 실행 */
 ```
 
-### aspect-ratio
+##### aspect-ratio
 
 `aspect-ratio`는 뷰포트의 너비와 높이에 대한 비율, `너비/높이`로 조건을 작성한다. `min/max` 접두사를 사용하면 너비 값의 최소/최대 비율을 정할 수 있다. 위의 `landscape`를 대신할 수 있다.
 
@@ -250,7 +371,7 @@ media query를 잘 활용한 두번째 사례는 smashing magazine 홈페이지�
 @media all and (max-aspect-ratio:5/4) { … } // 뷰포트 너비가 5/4 비율 이하면 실행
 ```
 
-### device-aspect-ratio
+##### device-aspect-ratio
 
 디바이스 스크린의 너비와 높이에 대한 비율. ‘너비/높이’ 순으로 조건을 작성한다. min/max 접두사를 사용하면 너비 값의 최소/대최 비율을 정할 수 있다. `aspect-ratio`와 다른 점은 뷰포트의 너비와 높이가 아닌 _디바이스_ 의 너비와 높이를 적용한다. 일반적으로 디바이스의 너비와 높이는 뷰포트의 너비와 높이보다 크다.
 
@@ -268,121 +389,6 @@ media query를 잘 활용한 두번째 사례는 smashing magazine 홈페이지�
 
 위의 예시 외에도 출력 장치의 색상에 대해 적용할 수 있는 `color`, `color-index`, `monochrome`, 출력 장치의 해상력에 대응하는 `resolution`, TV의 스캔 방식에 대응하는 `scan`, 출력 장치의 그리드 방식에 대응하는 `grid` 등 적용가능한 속성이 있다.
 
-## 3. 호환성
-
-### 3.1 호환성이란
-
-웹 호환성이란, 여러 브라우저에서 동일한 사용자 경험을 제공하는 것을 말한다. 21세기는 PC와 모바일 기기를 통들어 사용자가 다양한 기기로 웹 서비스를 이용하기 때문에 호환성을 준수하는 것이 매우 중요해졌다.
-
-### 3.반응형 구현 기술
-
-#### 3.2.1 viewport
-
-`viewport`: 기기 별로 뷰포트가 다르기 때문에 발생하는 배율 문제에 대응하기 위해 meta 태그의 속성으로 뷰포트 관련 설정을 추가할 수 있다.
-
-```html
-<meta name="viewport" content="width=device-width, initial-scale=1">
-```
-
-위 태그는 뷰포트의 너비를 단말기 너비에 맞추고, 그 배율을 1로 설정한다는 의미가 된다.
-
-#### 3.2.2 picture & source tag
-
-여러 개의 이미지 중에서 가장 적합한 이미지를 선택해 디스플레이나 기기에 표시한다.
-
-#### 1. 문법
-```html
-<picture>
-   <source ....>
-   <source ....>
-   <img/>
-</picture>
-```
-`picture`요소를 사용하려면 위 예시 처럼 자식 요소로 0개 이상의 `source`요소와 적어도 하나 이상의 `img`요소를 지정해 주어야한다. `picture` 요소를 지원하는 브라우저는 `source` 요소중에 가장 적합한 이미지를 선택해 디스플레이나 기기에 표시한다. 만약, `source` 요소중에 적합한 이미지를 찾을 수 없거나, `picture` 태그를 지원하지 않는 경우에는 `img` 요소를 표시한다.
-#### 2. 활용
-- 로딩시간을 줄인다.
-- 
-
-`source tag`: picture, audio, video 태그 내부에서 사용하는 요소이다. source 태그는 미디어 자료가 저장된 위치를 가리키며, 여러 미디어 자료 중 사용자에게 가장 적합한 데이터를 전달하기 위해 사용한다.
-
-```html
-<picture>
-    <source srcset="/media/cc0-images/surfer-240-200.jpg"
-            media="(min-width: 800px)">
-    <img src="/media/cc0-images/painted-hand-298-332.jpg" alt="" />
-</picture>
-```
-
-위에서 설명한 picture 태그와 source태그는 아래 CanIUse 사이트에서 조회한 결과, IE와 Opera 브라우저와 호환되지 않는다.
-
-<img src="./img/picture.png" width=700>
-<br/>
-<img src="./img/source.png" width=700>
-
-#### 3.2.3 img tag attributes
-
-`srcset`: 이미지 소스의 세트를 설정할 수 있다. 이 속성을 사용하면 브라우저가 사용자의 환경에 맞춰  가장 적합한 이미지를 선택해 보여준다.
-
-`sizes`: 미디어조건을 설정하고, 설정한 미디어 조건에 해당하는 최적화 출력 크기를 지정한다.
-
-```html
-<img srcset="elva-fairy-480w.jpg 480w,
-             elva-fairy-800w.jpg 800w"
-     sizes="(max-width: 600px) 480px,
-            800px"
-     src="elva-fairy-800w.jpg"
-     alt="Elva dressed as a fairy">
-```
-
-caniuse 에서 제공하는 정보에 의하면 picture 태그는 IE와 Opera Mini 브라우저에서 사용할 수 없다.
-
-<img src="./img/srcset-sizes.png" width=700>
-
-#### 3.2.4 media-query
-
-미디어 쿼리는 미디어 유형과, 미디어의 특성에 따라 스타일을 지정하고 싶을 때 사용한다.
-
-#### 1. 문법
-
-```
-@media 조건 {
-    css 문법
-}
-```
-
-> 참고1
-> 조건에는 미디어의 유형 또는 특성을 입력한다.
-
-> 참고2
-> 조건을 충족하면 {} 내에 작성한 css 문법이 적용된다.
-#### 1.1 논리 연산자
-
-`not`, `and`, `or`, `only`와 같은 논리 연산자를 사용해서 쿼리를 조합하면 복잡한 조건식을 만들 수 있다.
-
-#### a and b:
-
-`and` 연산자를 사용하면 조건 `a`와 `b`를 모두 충족해야 스타일이 적용된다.
-
-#### a or b:
-
-`or`을 사용하면 다수의 기능을 판별해서 하나라도 맞는 경우 스타일을 적용시킬 수 있습니다.
-
-#### not a and b
-
-`not` 연산자를 사용하면 이따라 작성된 전체 조건식의 의미를 반전시킨다. 즉 a 조건에만 적용되는 것이 아니고 a and b에 적용된다.
-
-> @media not all and (monochrome) {...}
-> 위의 쿼리는 아래와 같이 평가된다.
-> @media not(all and (monochrome)) {...}
-> 아래와 같이 평가되는 것이 아니다.
-> @media (not all) and (monochrome) {...}
-
-#### only
-
-`only` 연산자는 전체 쿼리가 일치할 경우에만 스타일이 적용된다.
-
-`screen and (max-width: 500px)` 쿼리를 작성했을 때 구형 브라우저에서 `max-width:500px` 부분을 인식하지 못하기 대문에 screen 조건이 참이되면 스타일을 적용해 버린다. 이와 같은 오류를 방지하기 위해 `only`를 사용할 수 있다.
-
 ### 참고자료
 
 - https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag
@@ -391,3 +397,6 @@ caniuse 에서 제공하는 정보에 의하면 picture 태그는 IE와 Opera Mi
 - https://developer.mozilla.org/en-US/docs/Web/HTML/Element/picture
 - https://developer.mozilla.org/ko/docs/Web/CSS/Media_Queries/Using_media_queries
 
+```
+
+```
