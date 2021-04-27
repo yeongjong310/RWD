@@ -118,4 +118,154 @@ media query를 잘 활용한 두번째 사례는 smashing magazine 홈페이지�
 
 유동적인 레이아웃의 변경으로 모바일과 데스크탑 환경에서 각각 최적의 사용자 경험을 제공하는 사례는 github repository 페이지다. 데스크탑 환경에서는 화면 좌측에 사용자 프로필, 우측에 repository 리스트가 위치해있지만 화면의 너비가 줄어듦에 따라 사용자 프로필은 화면의 윗쪽으로, repository 리스트는 화면의 아랫쪽으로 레이아웃이 유동적으로 변경되었다. 또한 데스크탑 환경에서는 네브바를 포함한 검색 인풋이 모바일 환경에서는 햄버거 메뉴로 숨겨졌다.
 
+## media query
+
+### 설명
+
+미디어 쿼리(media query)는 디바이스의 유형과 화면 해상도, 뷰포트 너비 등의 특성이나 수치에 따라 웹 사이트나 앱의 스타일을 수정할 때 유용하게 적용가능한 규칙이다.
+
+- 미디어 쿼리는 `@media`와 `@import` 규칙을 사용해 적용할 수 있다.
+- <style>, <link>, <source>, 기타 다른 HTML 요소에 `media` 특성을 사용해 특정 매체만 가리키게 할 수 있다.
+
+### 구문
+
+미디어 쿼리는 선택 사항인 미디어 유형과, 자유로운 수의 미디어 특성 표현식으로 이루어진다. 논리 연산자를 활용하여 다수의 쿼리를 다양한 방법으로 결합할 수 있으며, 쿼리는 대소문자가 구분되지 않는다.
+
+### 미디어 유형
+
+미디어 유형은 장치를 의미한다. 미디어 유형은 `not`이나 `only` 논리연산자를 사용할 때를 제외하면 선택사항이며 지정하지 않으면 디폴트 `all`이다.
+
+- `all`: 모든 장치에 적합하다.
+- `print`: 인쇄 결과물 및 출력 미리보기 화면에 표시 중인 문서이다.
+- `screen`: 주로 화면이 대상이다.
+- `speech`: 음성 합성장치이다.
+
+### 미디어 유형 특정
+
+미디어 유형은 프린터나 오디오 기반 스크린 리더처럼 특정 장치를 대상으로 하는 스타일을 만들 수 있다.
+
+> @media print { ... }
+
+다수의 장치도 특정할 수 있다.
+
+> @media screen, print { ... }
+
+### 미디어 쿼리 코드 템플릿
+
+아래 예시는 모든 해상도를 커버하기 위한 미디어 쿼리 코드 템플릿이다. All, Mobile, Tablet, Desktop 으로 기기별 대응 코드를 분류했지만 Liquid 레이아웃 기법을 사용하여 모든 해상도를 커버할 수 있다.
+
+```css
+/* All Device */
+모든 해상도를 위한 공통 코드를 작성한다. 모든 해상도에서 이 코드가 실행된다.
+
+/* Mobile Device */
+768px 미만 해상도의 모바일 기기를 위한 코드를 작성한다. 모든 해상도에서 이 코드가 실행된다. 미디어 쿼리를 지원하지 않는 모바일 기기를 위해 미디어 쿼리 구문을 사용하지 않는다.
+
+/* Tablet &amp; Desktop Device */
+@media all and (min-width: 768px) {
+    사용자 해상도가 768px 이상일 때 이 코드가 실행된다. 아이패드 또는 비교적 작은 해상도의 노트북이나 데스크탑에 대응하는 코드를 작성한다.
+}
+
+/* Desktop Device */
+@media all and (min-width: 1025px) {
+    사용자 해상도가 1025px 이상일 때 이 코드가 실행된다. 1025px 이상의 테스크탑에 대응하는 코드를 작성한다.
+}
+```
+
+### 조건문이 될 수 있는 속성들
+
+#### width / height
+
+뷰포트의 너비와 높이, 뷰포트의 크기는 HTML body 콘텐츠를 표시하는 영역으로 실제 스크린의 크기와 다를 수 있다.
+
+- Value: <length>
+- Applies to: visual and tactile media types
+- Accepts min/max prefixes: yes
+
+- _예시_
+
+```css
+@media all and (min-width: 768px) and (max-width: 1024px) {
+  ...;
+} /* 뷰포트 너비가 768px 이상 '그리고' 1024px 이하일 때 실행 */
+
+@media all and (width: 768px), (width: 1024px) {
+  ...;
+} /* 뷰포트 너비가 768px 이거나 1024px 일 때 실행 */
+
+@media not all and (min-width: 768px) and (max-width: 1024px) {
+  ...;
+} /* 뷰포트 너비가 768px 이상 1024px 이하가 '아닐 때', 즉 768px 미만 혹은 1024px 초과일 때 실행 */
+```
+
+#### device-width / device-height
+
+스크린의 너비와 높이. 스크린은 출력 장치가 픽셀을 표시할 수 있는 모든 영역으로 일반적으로 HTML body 콘텐츠를 표시하는 뷰포트 보다 크다.
+
+- Value: <length>
+- Applies to: visual and tactile media types
+- Accepts min/max prefixes: yes
+
+- _예시_
+
+```css
+@media all and (device-width:320px) and (device-height:480px) { … } // 스크린 너비가 320px '그리고' 높이가 480px 이면 실행
+
+@media all and (min-device-width:320px) and (min-device-height:480px) { … } // 스크린 너비가 최소 320px 이상 '그리고' 높이가 최소 480px 이상이면 실행
+```
+
+#### orientation
+
+`orientation`은 뷰포트의 너비와 높이 비율을 이용하여 세로 모드인지 가로 모드인지 판단하여 스타일을 적용한다.
+
+- Value: portrait | landscape
+- Applies to: bitmap media types
+- Accepts min/max prefixes: no
+
+- _예시_
+
+```css
+@media all and (orientation: portrait) {
+  ...;
+} /* 세로 모드, 뷰포트의 높이가 너비에 비해 상대적으로 크면 실행 */
+
+@media all and (orientation: landscape) {
+  ...;
+} /* 가로 모드, 뷰포트의 너비가 높이에 비해 상대적으로 크면 실행 */
+```
+
+### aspect-ratio
+
+`aspect-ratio`는 뷰포트의 너비와 높이에 대한 비율, `너비/높이`로 조건을 작성한다. `min/max` 접두사를 사용하면 너비 값의 최소/최대 비율을 정할 수 있다. 위의 `landscape`를 대신할 수 있다.
+
+- Value: <ratio>
+- Applies to: bitmat media types
+- Accepts min/max prefixes: yes
+
+- _예시_
+
+```css
+@media all and (aspect-ratio:5/4) { … } // 뷰포트 너비가 5, 높이가 4 비율이면 실행
+@media all and (min-aspect-ratio:5/4) { … } // 뷰포트 너비가 5/4 비율 이상이면 실행
+@media all and (max-aspect-ratio:5/4) { … } // 뷰포트 너비가 5/4 비율 이하면 실행
+```
+
+### device-aspect-ratio
+
+디바이스 스크린의 너비와 높이에 대한 비율. ‘너비/높이’ 순으로 조건을 작성한다. min/max 접두사를 사용하면 너비 값의 최소/대최 비율을 정할 수 있다. `aspect-ratio`와 다른 점은 뷰포트의 너비와 높이가 아닌 _디바이스_ 의 너비와 높이를 적용한다. 일반적으로 디바이스의 너비와 높이는 뷰포트의 너비와 높이보다 크다.
+
+- Value: <ratio>
+- Applies to: bitmap media types
+- Accepts min/max prefixes: yes
+
+- _예시_
+
+```css
+@media all and (device-aspect-ratio:5/4) { … } // 스크린 너비가 5, 높이가 4 비율이면 실행
+@media all and (min-device-aspect-ratio:5/4) { … } // 스크린 너비가 5/4 비율 이상이면 실행
+@media all and (max-device-aspect-ratio:5/4) { … } // 스크린 너비가 5/4 비율 이하면 실행
+```
+
+위의 예시 외에도 출력 장치의 색상에 대해 적용할 수 있는 `color`, `color-index`, `monochrome`, 출력 장치의 해상력에 대응하는 `resolution`, TV의 스캔 방식에 대응하는 `scan`, 출력 장치의 그리드 방식에 대응하는 `grid` 등 적용가능한 속성이 있다.
+
 ## 3. 호환성
