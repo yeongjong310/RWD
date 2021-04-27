@@ -81,4 +81,191 @@
 
 ## 2. 반응형 웹 디자인의 예
 
+### 2.1 미디어 쿼리(media query)를 잘 활용한 사례
+
+![media query를 잘 활용한 사례1 애플](./img/apple-responsive.gif)
+
+media query를 잘 활용한 사례는 애플의 공식 홈페이지이다. 너비가 746px 이상일 경우에는 새로 나온 iMac의 측면을 보여주어 신제품의 날렵한 옆모습과 다양한 색상이 가능함을 보여주기에 이상적이다. 반면, 너비가 746px 미만일 경우에는 iMac의 정면으로 사진이 회전하여 사용자가 제품을 사용할 때 보이는 모습을 강조하였다. media query를 이용해 자사 제품의 장점을 극대화한 사례로 불 수 있다.
+
+![media query를 잘 활용한 사례2 스매싱 매거진](./img/smashing-magazine-responsive.gif)
+
+media query를 잘 활용한 두번째 사례는 smashing magazine 홈페이지이다. 해당 예시에서 눈여겨볼 만한 것은 네비게이션 메뉴이다. 너비를 줄이면 메뉴들이 하나씩 줄어들다가 최종 하나 네비게이션만 남게되면 `More`가 `Menu`로 변경되는 것을 볼 수 있다.
+
+`More`의 경우 클릭했을 때 아래와 같은 네비게이션 모드를 확인할 수 있다.
+이는 모바일 환경에 최적화를 위해서라고 볼 수 있다.
+
+![mediq query를 잘 활용한 사례2-1 스매싱 매거진 네브바1](./img/smashing-magazine-nav1.png)
+
+`Menu`의 경우 클릭했을 때 위와 다른 네이게이션 모드로 변경되었음을 확인할 수 있다. 이는 데스크탑 환경에 익숙한 UX다.
+
+![media query를 잘 활용한 사례2-2 스매싱 매거니 네브바2](./img/smashing-magazine-nav2.png)
+
+### 2.2 유동 그리드(fluid grid)를 잘 활용한 사례
+
+![유동 그리드를 잘 활용한 사례 핀터레스트](./img/pinterest-responsive.gif)
+
+반응형 이미지를 잘 활용한 사례는 대량의 이미지 사진을 저장하고 이용자들끼리 공유할 수 있는 미국의 핀터레스트를 들 수 있다. 기본 브라우저에서 최대 8단의 사진 그리드에서부터 모바일 화면의 최소 2단까지 1단씩 줄어들며 유동 그리드를 최대로 사용한 예시에 해당한다. 사용자의 디바이스 너비에 따라 최적화된 사진 감상 경험을 극대화하기 위한 사례로 볼 수 있다.
+
+### 2.3 사이즈 조정 가능한 이미지와 텍스트(Resizable image and Text)
+
+![사이즈 조정 가능한 이미지와 텍스트를 잘 활용한 사례 Confluence](./img/confluence-responsive.gif)
+
+사이즈 조정 가능한 이미지와 텍스트를 잘 활용한 사례는 Atlassian 사의 Confluence 소개 페이지다. 해당 제품이 유리한 분야의 예시를 명료히 보여주기 위한 이미지와 텍스트 자료에서 화면 너비에 따라 보기에 편한 사진 이미지의 크기로 계속 변화한다. 특히 눈여겨볼만한 것은 너비가 줄어든다고 해서 사진의 너비가 계속적으로 줄어드는 것이 아니라 줄어들다가 다시 늘어났다는 점이다.
+
+### 2.4 유동 레이아웃 변경(Flexible visuals)
+
+![유동 레이아웃 변경을 잘 활용한 사례 github repository](./img/github-responsive.gif)
+
+유동적인 레이아웃의 변경으로 모바일과 데스크탑 환경에서 각각 최적의 사용자 경험을 제공하는 사례는 github repository 페이지다. 데스크탑 환경에서는 화면 좌측에 사용자 프로필, 우측에 repository 리스트가 위치해있지만 화면의 너비가 줄어듦에 따라 사용자 프로필은 화면의 윗쪽으로, repository 리스트는 화면의 아랫쪽으로 레이아웃이 유동적으로 변경되었다. 또한 데스크탑 환경에서는 네브바를 포함한 검색 인풋이 모바일 환경에서는 햄버거 메뉴로 숨겨졌다.
+
+## media query
+
+### 설명
+
+미디어 쿼리(media query)는 디바이스의 유형과 화면 해상도, 뷰포트 너비 등의 특성이나 수치에 따라 웹 사이트나 앱의 스타일을 수정할 때 유용하게 적용가능한 규칙이다.
+
+- 미디어 쿼리는 `@media`와 `@import` 규칙을 사용해 적용할 수 있다.
+- <style>, <link>, <source>, 기타 다른 HTML 요소에 `media` 특성을 사용해 특정 매체만 가리키게 할 수 있다.
+
+### 구문
+
+미디어 쿼리는 선택 사항인 미디어 유형과, 자유로운 수의 미디어 특성 표현식으로 이루어진다. 논리 연산자를 활용하여 다수의 쿼리를 다양한 방법으로 결합할 수 있으며, 쿼리는 대소문자가 구분되지 않는다.
+
+### 미디어 유형
+
+미디어 유형은 장치를 의미한다. 미디어 유형은 `not`이나 `only` 논리연산자를 사용할 때를 제외하면 선택사항이며 지정하지 않으면 디폴트 `all`이다.
+
+- `all`: 모든 장치에 적합하다.
+- `print`: 인쇄 결과물 및 출력 미리보기 화면에 표시 중인 문서이다.
+- `screen`: 주로 화면이 대상이다.
+- `speech`: 음성 합성장치이다.
+
+### 미디어 유형 특정
+
+미디어 유형은 프린터나 오디오 기반 스크린 리더처럼 특정 장치를 대상으로 하는 스타일을 만들 수 있다.
+
+> @media print { ... }
+
+다수의 장치도 특정할 수 있다.
+
+> @media screen, print { ... }
+
+### 미디어 쿼리 코드 템플릿
+
+아래 예시는 모든 해상도를 커버하기 위한 미디어 쿼리 코드 템플릿이다. All, Mobile, Tablet, Desktop 으로 기기별 대응 코드를 분류했지만 Liquid 레이아웃 기법을 사용하여 모든 해상도를 커버할 수 있다.
+
+```css
+/* All Device */
+모든 해상도를 위한 공통 코드를 작성한다. 모든 해상도에서 이 코드가 실행된다.
+
+/* Mobile Device */
+768px 미만 해상도의 모바일 기기를 위한 코드를 작성한다. 모든 해상도에서 이 코드가 실행된다. 미디어 쿼리를 지원하지 않는 모바일 기기를 위해 미디어 쿼리 구문을 사용하지 않는다.
+
+/* Tablet &amp; Desktop Device */
+@media all and (min-width: 768px) {
+    사용자 해상도가 768px 이상일 때 이 코드가 실행된다. 아이패드 또는 비교적 작은 해상도의 노트북이나 데스크탑에 대응하는 코드를 작성한다.
+}
+
+/* Desktop Device */
+@media all and (min-width: 1025px) {
+    사용자 해상도가 1025px 이상일 때 이 코드가 실행된다. 1025px 이상의 테스크탑에 대응하는 코드를 작성한다.
+}
+```
+
+### 조건문이 될 수 있는 속성들
+
+#### width / height
+
+뷰포트의 너비와 높이, 뷰포트의 크기는 HTML body 콘텐츠를 표시하는 영역으로 실제 스크린의 크기와 다를 수 있다.
+
+- Value: <length>
+- Applies to: visual and tactile media types
+- Accepts min/max prefixes: yes
+
+- _예시_
+
+```css
+@media all and (min-width: 768px) and (max-width: 1024px) {
+  ...;
+} /* 뷰포트 너비가 768px 이상 '그리고' 1024px 이하일 때 실행 */
+
+@media all and (width: 768px), (width: 1024px) {
+  ...;
+} /* 뷰포트 너비가 768px 이거나 1024px 일 때 실행 */
+
+@media not all and (min-width: 768px) and (max-width: 1024px) {
+  ...;
+} /* 뷰포트 너비가 768px 이상 1024px 이하가 '아닐 때', 즉 768px 미만 혹은 1024px 초과일 때 실행 */
+```
+
+#### device-width / device-height
+
+스크린의 너비와 높이. 스크린은 출력 장치가 픽셀을 표시할 수 있는 모든 영역으로 일반적으로 HTML body 콘텐츠를 표시하는 뷰포트 보다 크다.
+
+- Value: <length>
+- Applies to: visual and tactile media types
+- Accepts min/max prefixes: yes
+
+- _예시_
+
+```css
+@media all and (device-width:320px) and (device-height:480px) { … } // 스크린 너비가 320px '그리고' 높이가 480px 이면 실행
+
+@media all and (min-device-width:320px) and (min-device-height:480px) { … } // 스크린 너비가 최소 320px 이상 '그리고' 높이가 최소 480px 이상이면 실행
+```
+
+#### orientation
+
+`orientation`은 뷰포트의 너비와 높이 비율을 이용하여 세로 모드인지 가로 모드인지 판단하여 스타일을 적용한다.
+
+- Value: portrait | landscape
+- Applies to: bitmap media types
+- Accepts min/max prefixes: no
+
+- _예시_
+
+```css
+@media all and (orientation: portrait) {
+  ...;
+} /* 세로 모드, 뷰포트의 높이가 너비에 비해 상대적으로 크면 실행 */
+
+@media all and (orientation: landscape) {
+  ...;
+} /* 가로 모드, 뷰포트의 너비가 높이에 비해 상대적으로 크면 실행 */
+```
+
+### aspect-ratio
+
+`aspect-ratio`는 뷰포트의 너비와 높이에 대한 비율, `너비/높이`로 조건을 작성한다. `min/max` 접두사를 사용하면 너비 값의 최소/최대 비율을 정할 수 있다. 위의 `landscape`를 대신할 수 있다.
+
+- Value: <ratio>
+- Applies to: bitmat media types
+- Accepts min/max prefixes: yes
+
+- _예시_
+
+```css
+@media all and (aspect-ratio:5/4) { … } // 뷰포트 너비가 5, 높이가 4 비율이면 실행
+@media all and (min-aspect-ratio:5/4) { … } // 뷰포트 너비가 5/4 비율 이상이면 실행
+@media all and (max-aspect-ratio:5/4) { … } // 뷰포트 너비가 5/4 비율 이하면 실행
+```
+
+### device-aspect-ratio
+
+디바이스 스크린의 너비와 높이에 대한 비율. ‘너비/높이’ 순으로 조건을 작성한다. min/max 접두사를 사용하면 너비 값의 최소/대최 비율을 정할 수 있다. `aspect-ratio`와 다른 점은 뷰포트의 너비와 높이가 아닌 _디바이스_ 의 너비와 높이를 적용한다. 일반적으로 디바이스의 너비와 높이는 뷰포트의 너비와 높이보다 크다.
+
+- Value: <ratio>
+- Applies to: bitmap media types
+- Accepts min/max prefixes: yes
+
+- _예시_
+
+```css
+@media all and (device-aspect-ratio:5/4) { … } // 스크린 너비가 5, 높이가 4 비율이면 실행
+@media all and (min-device-aspect-ratio:5/4) { … } // 스크린 너비가 5/4 비율 이상이면 실행
+@media all and (max-device-aspect-ratio:5/4) { … } // 스크린 너비가 5/4 비율 이하면 실행
+```
+
+위의 예시 외에도 출력 장치의 색상에 대해 적용할 수 있는 `color`, `color-index`, `monochrome`, 출력 장치의 해상력에 대응하는 `resolution`, TV의 스캔 방식에 대응하는 `scan`, 출력 장치의 그리드 방식에 대응하는 `grid` 등 적용가능한 속성이 있다.
+
 ## 3. 호환성
