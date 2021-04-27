@@ -82,3 +82,125 @@
 ## 2. 반응형 웹 디자인의 예
 
 ## 3. 호환성
+
+### 3.1 호환성이란
+
+웹 호환성이란, 여러 브라우저에서 동일한 사용자 경험을 제공하는 것을 말한다. 21세기는 PC와 모바일 기기를 통들어 사용자가 다양한 기기로 웹 서비스를 이용하기 때문에 호환성을 준수하는 것이 매우 중요해졌다.
+
+### 3.반응형 구현 기술
+
+#### 3.2.1 viewport
+
+`viewport`: 기기 별로 뷰포트가 다르기 때문에 발생하는 배율 문제에 대응하기 위해 meta 태그의 속성으로 뷰포트 관련 설정을 추가할 수 있다.
+
+```html
+<meta name="viewport" content="width=device-width, initial-scale=1">
+```
+
+위 태그는 뷰포트의 너비를 단말기 너비에 맞추고, 그 배율을 1로 설정한다는 의미가 된다.
+
+#### 3.2.2 picture & source tag
+
+여러 개의 이미지 중에서 가장 적합한 이미지를 선택해 디스플레이나 기기에 표시한다.
+
+#### 1. 문법
+```html
+<picture>
+   <source ....>
+   <source ....>
+   <img/>
+</picture>
+```
+`picture`요소를 사용하려면 위 예시 처럼 자식 요소로 0개 이상의 `source`요소와 적어도 하나 이상의 `img`요소를 지정해 주어야한다. `picture` 요소를 지원하는 브라우저는 `source` 요소중에 가장 적합한 이미지를 선택해 디스플레이나 기기에 표시한다. 만약, `source` 요소중에 적합한 이미지를 찾을 수 없거나, `picture` 태그를 지원하지 않는 경우에는 `img` 요소를 표시한다.
+#### 2. 활용
+- 로딩시간을 줄인다.
+- 
+
+`source tag`: picture, audio, video 태그 내부에서 사용하는 요소이다. source 태그는 미디어 자료가 저장된 위치를 가리키며, 여러 미디어 자료 중 사용자에게 가장 적합한 데이터를 전달하기 위해 사용한다.
+
+```html
+<picture>
+    <source srcset="/media/cc0-images/surfer-240-200.jpg"
+            media="(min-width: 800px)">
+    <img src="/media/cc0-images/painted-hand-298-332.jpg" alt="" />
+</picture>
+```
+
+위에서 설명한 picture 태그와 source태그는 아래 CanIUse 사이트에서 조회한 결과, IE와 Opera 브라우저와 호환되지 않는다.
+
+<img src="./img/picture.png" width=700>
+<br/>
+<img src="./img/source.png" width=700>
+
+#### 3.2.3 img tag attributes
+
+`srcset`: 이미지 소스의 세트를 설정할 수 있다. 이 속성을 사용하면 브라우저가 사용자의 환경에 맞춰  가장 적합한 이미지를 선택해 보여준다.
+
+`sizes`: 미디어조건을 설정하고, 설정한 미디어 조건에 해당하는 최적화 출력 크기를 지정한다.
+
+```html
+<img srcset="elva-fairy-480w.jpg 480w,
+             elva-fairy-800w.jpg 800w"
+     sizes="(max-width: 600px) 480px,
+            800px"
+     src="elva-fairy-800w.jpg"
+     alt="Elva dressed as a fairy">
+```
+
+caniuse 에서 제공하는 정보에 의하면 picture 태그는 IE와 Opera Mini 브라우저에서 사용할 수 없다.
+
+<img src="./img/srcset-sizes.png" width=700>
+
+#### 3.2.4 media-query
+
+미디어 쿼리는 미디어 유형과, 미디어의 특성에 따라 스타일을 지정하고 싶을 때 사용한다.
+
+#### 1. 문법
+
+```
+@media 조건 {
+    css 문법
+}
+```
+
+> 참고1
+> 조건에는 미디어의 유형 또는 특성을 입력한다.
+
+> 참고2
+> 조건을 충족하면 {} 내에 작성한 css 문법이 적용된다.
+#### 1.1 논리 연산자
+
+`not`, `and`, `or`, `only`와 같은 논리 연산자를 사용해서 쿼리를 조합하면 복잡한 조건식을 만들 수 있다.
+
+#### a and b:
+
+`and` 연산자를 사용하면 조건 `a`와 `b`를 모두 충족해야 스타일이 적용된다.
+
+#### a or b:
+
+`or`을 사용하면 다수의 기능을 판별해서 하나라도 맞는 경우 스타일을 적용시킬 수 있습니다.
+
+#### not a and b
+
+`not` 연산자를 사용하면 이따라 작성된 전체 조건식의 의미를 반전시킨다. 즉 a 조건에만 적용되는 것이 아니고 a and b에 적용된다.
+
+> @media not all and (monochrome) {...}
+> 위의 쿼리는 아래와 같이 평가된다.
+> @media not(all and (monochrome)) {...}
+> 아래와 같이 평가되는 것이 아니다.
+> @media (not all) and (monochrome) {...}
+
+#### only
+
+`only` 연산자는 전체 쿼리가 일치할 경우에만 스타일이 적용된다.
+
+`screen and (max-width: 500px)` 쿼리를 작성했을 때 구형 브라우저에서 `max-width:500px` 부분을 인식하지 못하기 대문에 screen 조건이 참이되면 스타일을 적용해 버린다. 이와 같은 오류를 방지하기 위해 `only`를 사용할 수 있다.
+
+### 참고자료
+
+- https://developer.mozilla.org/en-US/docs/Web/HTML/Viewport_meta_tag
+- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/picture
+- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/source
+- https://developer.mozilla.org/en-US/docs/Web/HTML/Element/picture
+- https://developer.mozilla.org/ko/docs/Web/CSS/Media_Queries/Using_media_queries
+
